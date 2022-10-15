@@ -36,7 +36,7 @@ class Login extends React.Component {
     else if (this.state.password.length < 6)
       err = "Password too long (min 6 characters)";
     else {
-      fetch("http://localhost:5500/makeAccount", {
+      fetch("http://64.227.107.77:5500/makeAccount", {
         headers: {
           "Content-type": "application/json",
         },
@@ -68,7 +68,7 @@ class Login extends React.Component {
     if (this.state.username === "") err = "Username required";
     else if (this.state.password === "") err = "Password required";
     else {
-      fetch("http://localhost:5500/login", {
+      fetch("http://64.227.107.77:5500/login", {
         headers: {
           "Content-type": "application/json",
         },

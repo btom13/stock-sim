@@ -21,15 +21,15 @@ class News extends React.Component {
     let getNews;
     if (this.props.stock) {
       let data = await (
-        await fetch(`//localhost:5500/getName/${this.props.stock}`)
+        await fetch(`//64.227.107.77:5500/getName/${this.props.stock}`)
       ).json();
-      getNews = fetch(`//localhost:5500/getNews/${data.name}`)
+      getNews = fetch(`//64.227.107.77:5500/getNews/${data.name}`)
         .then((response) => response.json())
         .catch((err) => {
           console.error(err);
         });
     } else {
-      getNews = fetch(`//localhost:5500/getNews`)
+      getNews = fetch(`//64.227.107.77:5500/getNews`)
         .then((response) => response.json())
         .catch((err) => {
           console.error(err);
