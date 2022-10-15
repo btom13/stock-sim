@@ -3,12 +3,14 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const https = require("https");
 const cookieParser = require("cookie-parser");
 const aesjs = require("aes-js");
+const fs = request("fs");
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT;
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "https://batom.online" }));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -34,23 +36,26 @@ function decryptAES(str) {
   return aesjs.utils.utf8.fromBytes(decryptedBytes);
 }
 
-const id = "6331576c8ed756801e639988";
+https
+  .createServer(
+    { key: fs.readFileSync("key.pem"), cert: fs.readFileSync("cert.pem") },
+    app
+  )
+  .listen(port, () => {
+    // perform a database connection when server starts
+    db.initializeDb().then(async (db) => {
+      client = db;
+      // console.log(await axios.get(`https://cloud.iexapis.com/stable/stock/aapl/chart`));
+      // client.createUser("Bob", "password");
 
-app.listen(port, () => {
-  // perform a database connection when server starts
-  db.initializeDb().then(async (db) => {
-    client = db;
-    // console.log(await axios.get(`https://cloud.iexapis.com/stable/stock/aapl/chart`));
-    // client.createUser("Bob", "password");
+      // console.log(await client.getUser(id));
+      // addListing();
+      // client.deleteListing("massive stonk");
+      // client.getStock("massive stonk");
+    });
 
-    // console.log(await client.getUser(id));
-    // addListing();
-    // client.deleteListing("massive stonk");
-    // client.getStock("massive stonk");
+    // console.log(`Server is running on port: ${port}`);
   });
-
-  console.log(`Server is running on port: ${port}`);
-});
 
 // app.use(function (req, res, next) {
 //   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
