@@ -123,7 +123,7 @@ class BuySell extends React.Component {
 
   handleBuy(event) {
     event.preventDefault();
-    fetch("http:https://batom.online:5500/buy", {
+    fetch("https://batom.online:5500/buy", {
       headers: {
         "Content-type": "application/json",
       },
@@ -139,7 +139,7 @@ class BuySell extends React.Component {
   }
   handleSell(event) {
     event.preventDefault();
-    fetch("http:https://batom.online:5500/sell", {
+    fetch("https://batom.online:5500/sell", {
       headers: {
         "Content-type": "application/json",
       },
