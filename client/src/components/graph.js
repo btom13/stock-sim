@@ -45,7 +45,7 @@ class Graph extends React.Component {
 
   setData() {
     fetch(
-      `//64.227.107.77:5500/getStockData/${this.props.stock}/${this.state.interval}`
+      `https://batom.online:5500/getStockData/${this.props.stock}/${this.state.interval}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -54,7 +54,7 @@ class Graph extends React.Component {
       .catch((err) => {
         console.error(err);
       });
-    fetch(`//64.227.107.77:5500/getName/${this.props.stock}`)
+    fetch(`https://batom.online:5500/getName/${this.props.stock}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({ name: data.name });

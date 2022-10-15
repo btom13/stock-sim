@@ -123,7 +123,7 @@ class BuySell extends React.Component {
 
   handleBuy(event) {
     event.preventDefault();
-    fetch("http://64.227.107.77:5500/buy", {
+    fetch("http:https://batom.online:5500/buy", {
       headers: {
         "Content-type": "application/json",
       },
@@ -139,7 +139,7 @@ class BuySell extends React.Component {
   }
   handleSell(event) {
     event.preventDefault();
-    fetch("http://64.227.107.77:5500/sell", {
+    fetch("http:https://batom.online:5500/sell", {
       headers: {
         "Content-type": "application/json",
       },
@@ -224,7 +224,7 @@ class StockSearch extends React.Component {
   }
 
   update() {
-    const getBal = fetch(`//64.227.107.77:5500/getBal`, {
+    const getBal = fetch(`https://batom.online:5500/getBal`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -232,7 +232,7 @@ class StockSearch extends React.Component {
       .catch((err) => {
         console.err(err);
       });
-    const getStocks = fetch(`//64.227.107.77:5500/getStocks`, {
+    const getStocks = fetch(`https://batom.online:5500/getStocks`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -257,7 +257,7 @@ class StockSearch extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let stock = this.state.value;
-    fetch(`//64.227.107.77:5500/getQuote/${stock}`)
+    fetch(`https://batom.online:5500/getQuote/${stock}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {

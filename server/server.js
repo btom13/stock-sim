@@ -6,7 +6,7 @@ const cors = require("cors");
 const https = require("https");
 const cookieParser = require("cookie-parser");
 const aesjs = require("aes-js");
-const fs = request("fs");
+const fs = require("fs");
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT;
 
