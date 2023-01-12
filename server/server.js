@@ -45,35 +45,9 @@ https
     // perform a database connection when server starts
     db.initializeDb().then(async (db) => {
       client = db;
-      // console.log(await axios.get(`https://cloud.iexapis.com/stable/stock/aapl/chart`));
-      // client.createUser("Bob", "password");
-
-      // console.log(await client.getUser(id));
-      // addListing();
-      // client.deleteListing("massive stonk");
-      // client.getStock("massive stonk");
     });
-
-    // console.log(`Server is running on port: ${port}`);
   });
 
-// app.use(function (req, res, next) {
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type"
-//   );
-
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-
-//   next();
-// });
 
 async function getQuote(stock) {
   try {
@@ -129,47 +103,55 @@ amount: number
 */
 
 app.post("/makeAccount", async (request, response) => {
-  const username = request.body.username;
-  const password = request.body.password;
-  let salt = bcrypt.genSaltSync(12);
-  let hash = bcrypt.hashSync(password, salt);
-  let id;
-  if (await client.doesUserExist(username)) {
-    response.json({ response: "Username already taken" });
-  } else {
-    id = await client.createUser(username, hash);
-    if (id) {
-      response.cookie("token", encryptAES(id), {
-        httpOnly: false,
-        secure: false,
-        expires: new Date(Date.now() + 31536000000),
-      }); // MAKE THIS SECURE ON WEBSITE
-      response.json({ response: "success" });
+  try{
+    const username = request.body.username;
+    const password = request.body.password;
+    let salt = bcrypt.genSaltSync(12);
+    let hash = bcrypt.hashSync(password, salt);
+    let id;
+    if (await client.doesUserExist(username)) {
+      response.json({ response: "Username already taken" });
     } else {
-      response.json({ response: "Error creating account" });
+      id = await client.createUser(username, hash);
+      if (id) {
+        response.cookie("token", encryptAES(id), {
+          httpOnly: false,
+          secure: false,
+          expires: new Date(Date.now() + 31536000000),
+        }); // MAKE THIS SECURE ON WEBSITE
+        response.json({ response: "success" });
+      } else {
+        response.json({ response: "Error creating account" });
+      }
     }
+  } catch {
+      response.json({ response: "Error creating account" });
   }
 });
 
 app.post("/login", async (request, response) => {
-  const username = request.body.username;
-  const password = request.body.password;
+  try{
+    const username = request.body.username;
+    const password = request.body.password;
 
-  if (!(await client.doesUserExist(username))) {
-    response.json({ response: "Username or password is incorrect" });
-  } else {
-    pass = (await client.getPass(username)).hashedPass;
-    if (pass) {
-      let id = await client.getID(username);
-      response.cookie("token", encryptAES(id), {
-        httpOnly: false,
-        secure: false,
-        expires: new Date(Date.now() + 31536000000),
-      }); // MAKE THIS SECURE ON WEBSITE
-      response.json({ response: "success" });
-    } else {
+    if (!(await client.doesUserExist(username))) {
       response.json({ response: "Username or password is incorrect" });
+    } else {
+      pass = (await client.getPass(username)).hashedPass;
+      if (bcrypt.compareSync(password,pass)) {
+        let id = await client.getID(username);
+        response.cookie("token", encryptAES(id), {
+          httpOnly: false,
+          secure: false,
+          expires: new Date(Date.now() + 31536000000),
+        }); // MAKE THIS SECURE ON WEBSITE
+        response.json({ response: "success" });
+      } else {
+        response.json({ response: "Username or password is incorrect" });
+      }
     }
+  } catch {
+    response.json({ response: "Username or password is incorrect" });
   }
 });
 
@@ -269,6 +251,7 @@ app.get("/getNews", async (request, response) => {
       })
     );
   } catch (error) {
+    // response.send("error");
     return "error";
   }
 });
